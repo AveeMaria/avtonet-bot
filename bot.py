@@ -91,6 +91,8 @@ async def run_every_3_minutes():
             print(f"[{now.replace(microsecond=0)}] Scraping started.")
 
             try:
+                await client.change_presence(status=discord.Status.dnd, activity=discord.Game(name="Scraping..."))
+
                 filtered_items = await sync_scrape_cycle()
 
                 for car in filtered_items:
@@ -100,6 +102,10 @@ async def run_every_3_minutes():
 
             except Exception as e:
                 print(f"Error during scraping cycle: {e}")
+
+            finally:
+                await client.change_presence(status=discord.Status.online, activity=discord.Game(name="Idle..."))
+
 
             now = datetime.datetime.now().replace(second=0, microsecond=0)
             minute = now.minute - (now.minute % 3) + 3
