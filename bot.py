@@ -75,7 +75,7 @@ async def sync_scrape_cycle():
     data = []
     for car in filtered:
         print(f"Scraping detail: {car['link']}")
-        data.append(individual_scrape(driver, car["link"]))
+        data.append(await asyncio.to_thread(individual_scrape, driver, car["link"]))
 
     log_data(enumerate_items(data))
     return filtered
